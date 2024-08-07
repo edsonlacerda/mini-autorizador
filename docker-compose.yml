@@ -3,7 +3,7 @@ version: "3.7"
 services:
 
   mysql:
-    image: mysql:5.7
+    image: mysql:8.0.33
     hostname: mysql
     container_name: mysql
     restart: always
@@ -11,10 +11,10 @@ services:
       - "3306:3306"
     environment:
       MYSQL_DATABASE: miniautorizador
-      MYSQL_ROOT_PASSWORD:
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
     healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$MYSQL_ROOT_PASSWORD" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -34,27 +34,6 @@ services:
       SPRING_DATASOURCE_PASSWORD:
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
 
-  db:
-    image: mysql:5.7
-    hostname: mysqltest
-    container_name: mysqltest
-    environment:
-      MYSQL_DATABASE: testdb
-      MYSQL_USER: testuser
-      MYSQL_PASSWORD: testpass
-      MYSQL_ROOT_PASSWORD: rootpass
-    ports:
-      - "3307:3306"
-
-  test:
-    build:
-      context: .
-    container_name: miniautorizador-tests
-    command: mvn test
-    depends_on:
-      - db
-    environment:
-      SPRING_PROFILES_ACTIVE: test
 
 #  mongo:
 #    image: mongo:4.2
