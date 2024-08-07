@@ -13,11 +13,6 @@ services:
       MYSQL_DATABASE: miniautorizador
       MYSQL_ROOT_PASSWORD: 123456
       MYSQL_ALLOW_EMPTY_PASSWORD: "no"
-    healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$MYSQL_ROOT_PASSWORD" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
   app:
     build:
@@ -31,7 +26,7 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/miniautorizador
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD:
+      SPRING_DATASOURCE_PASSWORD: 123456
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
 
 
