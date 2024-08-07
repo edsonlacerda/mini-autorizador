@@ -6,7 +6,6 @@ import jakarta.persistence.Version;
 
 import java.math.BigDecimal;
 
-//@Document(collection = "cartoes")
 @Entity
 public class Cartao {
 
