@@ -1,5 +1,6 @@
 package com.vr.mini_autorizador.controllers;
 
+import com.vr.mini_autorizador.controllers.api.CartaoAPI;
 import com.vr.mini_autorizador.models.Cartao;
 import com.vr.mini_autorizador.models.dto.CartaoResponseDTO;
 import com.vr.mini_autorizador.services.CartaoService;
@@ -13,19 +14,19 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/cartoes")
-public class CartaoController {
+public class CartaoController implements CartaoAPI {
 
     @Autowired
     private CartaoService cartaoService;
 
-    @PostMapping
+    @Override
     public ResponseEntity<CartaoResponseDTO> criarCartao(@RequestBody Cartao cartao) {
         return cartaoService.criarCartao(cartao)
                 .map(c -> new ResponseEntity<>(new CartaoResponseDTO(c.getNumeroCartao(), c.getSenha()), HttpStatus.CREATED))
                 .orElseGet(() -> new ResponseEntity<>(new CartaoResponseDTO(cartao.getNumeroCartao(), cartao.getSenha()), HttpStatus.UNPROCESSABLE_ENTITY));
     }
 
-    @GetMapping("/{numeroCartao}")
+    @Override
     public ResponseEntity<BigDecimal> obterSaldo(@PathVariable String numeroCartao) {
         Optional<BigDecimal> saldo = cartaoService.obterSaldo(numeroCartao);
         return saldo.map(s -> new ResponseEntity<>(s, HttpStatus.OK))
